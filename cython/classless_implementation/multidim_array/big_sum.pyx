@@ -4,9 +4,9 @@ cimport numpy as np
 import numpy as np # as suggested by jorgeca
 
 cdef extern from "big_sum_implementation.cpp":
-    void big_calculation(double* X, int N, int M, int L)
+    void big_calculation(complex* X, int N, int M, int L)
 
-def run(np.ndarray[np.double_t, ndim=3, mode="c"] X):
+def run(np.ndarray[np.complex128_t, ndim=3, mode="c"] X):
     cdef int N
     cdef int M
     cdef int L
@@ -28,6 +28,6 @@ def pure_python_run(data):
         for i in xrange(data.shape[0]):
             for k in xrange(data.shape[1]):
                 for l in xrange(data.shape[2]):
-                    data[i][k][l] = ((i+1)*(k+1)*(l+1))**2
+                    data[i][k][l] = ((i+1)*(k+1)*(l+1))**2 + 1j*(i+k+l)
     return data
         

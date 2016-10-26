@@ -1,8 +1,9 @@
 from big_sum import run, pure_python_run
 from numpy import zeros
 from time import time
+import numpy as np
 
-a = zeros((10,10,10), float)
+a = zeros((10,10,10), np.complex128)
 
 t = time()
 b = run(a)

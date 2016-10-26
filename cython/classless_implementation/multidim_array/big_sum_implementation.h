@@ -1,3 +1,3 @@
-void big_calculation(double* data, int size, int size2, int size3);
+void big_calculation(std::complex<double>* data, int size, int size2, int size3);
 
 
