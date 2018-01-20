@@ -1,0 +1,17 @@
+*
+
+!.gitignore
+!**.py
+!cython/
+#!cython/**
+#cython/**/*.so
+!cython/**/*.py
+!cython/**/*.pyx
+!cython/**/*.cpp
+!cython/**/*.c
+!bansko/
+bansko/*
+!bansko/*.py
+!grigor_dimitrov_rankings/*.py
+!hubbard_dos/*.py
+
