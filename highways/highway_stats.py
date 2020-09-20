@@ -9,7 +9,7 @@ from numpy import zeros, arange, linspace
 #plt.xkcd()
 
 y_max1 = 150 #лява скала
-y_max2 = 800 #дясна скала
+y_max2 = 820 #дясна скала
 
 trakia_dict ={"until 1995":133, #trakia
             1995:32,
@@ -53,9 +53,14 @@ haemus_dict ={"until 1995":127.9, #hemus
             2010:0,
             2011:0,
             2012:0,
-            2013:16.46,
+            2013:16.46, #Шумен - Панайот Волово и София - Яна
             2014:0.,
-            2015:4.989}
+            2015:4.989, #Белокопитово
+            2016: 0,
+            2017: 0,
+            2018: 0,
+            2019: 9.3, #Ябланица - Боаза
+            }
 
 maritsa_dict ={"until 1995":19.14, #martisa
             1995:0,
@@ -101,7 +106,14 @@ struma_dict ={"until 1995":0,
             2012:0,
             2013:13.98,
             2014:0.,
-            2015:14.7 + 37.48}
+            2015:14.7 + 37.48,
+            2016: 0.,
+            2017: 0.,
+            2018: 23.6, #лот 3.3 Кресна - Сандански, 17 декември 2018
+            2019: 7., #лот 3.1.1 пв Благоевград - пв Благоевград юг, 23 май 2019
+            2020: 0.
+
+}
 
 lyulin_dict ={"until 1995":0, 
             1995:0,
@@ -147,7 +159,13 @@ kalotina_dict ={"until 1995":0,
             2012:0,
             2013:0,
             2014:0.,
-            2015:0.}
+            2015:0.,
+            2016: 16.5, #северна скоростна тангента
+            2017: 0.,
+            2018: 0.,
+            2019: 0.,
+            2020: 0.
+}
 
 cherno_more_dict ={"until 1995":10, 
             1995:0,
@@ -171,6 +189,7 @@ cherno_more_dict ={"until 1995":10,
             2013:0,
             2014:0.,
             2015:0.}
+
 
 class highway(object):
     def __init__(self, name, proj_length, year_started, timeline):
@@ -212,19 +231,23 @@ for bg in [0,1,2]:
     #trakia.show_timeline()
     
     start_year = 1995
-    end_year = 2016
+    end_year = 2021
     timeline = zeros(end_year-start_year, float)
     cumulative = zeros(end_year-start_year, float)
     for highway_dict in dict_list:
         for i,key in enumerate(range(start_year,end_year)):
-            timeline[i] += highway_dict[key]
             cumulative[i] += highway_dict["until 1995"]
+            try:
+                timeline[i] += highway_dict[key]
+            except KeyError:
+                timeline[i] += 0.
+                
     
+    print "before 1995:", cumulative[i]
+    print "{:<10} {:<10} {:<10}".format( "year", "in use",  "new")
     for i in range(end_year-start_year):
-        if i == 0:
-            print "before 1995:", cumulative[i]
         cumulative[i]+= sum(timeline[:i+1])
-        print start_year+i, cumulative[i]
+        print "{:<10} {:<10} {:<10}".format( start_year+i, cumulative[i],  timeline[i] )
     
     
     if bg == 1: #Български текст
@@ -232,7 +255,7 @@ for bg in [0,1,2]:
         label2 = "общо, км".decode('utf-8')
         label3 = "Открити".decode('utf-8')
         label4 = "Общо".decode('utf-8')
-        label5 = "*към октомври 2015".decode('utf-8')
+        label5 = "*към 20 септември 2020".decode('utf-8')
         label6 = "Магистралите в България".decode('utf-8')
         label7 = "Прием в ЕС".decode('utf-8')
         suffix = "bg"
@@ -241,7 +264,7 @@ for bg in [0,1,2]:
         label2 = "total in use, km"
         label3 = "Inaugurated"
         label4 = "Total"
-        label5 = "*as of October 2015"
+        label5 = "*as of 20 September 2020"
         label6 = "Motorways in Bulgaria"
         label7 = "EU accession"
         suffix = "en"
@@ -250,7 +273,7 @@ for bg in [0,1,2]:
         label2 = "in Betrieb, km"
         label3 = "Fertiggestellt"
         label4 = "in Betrieb"
-        label5 = "*Stand Oktober 2015"
+        label5 = "*Stand 20 September 2020"
         label6 = "Autobahnen in Bulgarien"
         label7 = "EU Beitritt"
         suffix = "de"
@@ -261,7 +284,8 @@ for bg in [0,1,2]:
     fig1 = plt.figure(facecolor = 'k', frameon = False)
     ax1 = fig1.add_subplot(111)
     #ax1.set_axis_bgcolor('k')
-    ax1.set_axis_bgcolor('1.0') #0.0 = черно, 1.0 = прозрачно
+    #ax1.set_axis_bgcolor('1.0') #0.0 = черно, 1.0 = прозрачно
+    ax1.set_facecolor('1.0') #0.0 = черно, 1.0 = прозрачно
     
     inaugurated = ax1.bar(range(start_year,end_year), timeline, color = color1, width = 0.4)
     
@@ -274,7 +298,7 @@ for bg in [0,1,2]:
     ax1.set_ylim(0,y_max1)
     
     labels = range(start_year, end_year-1)
-    labels.append("2015*")
+    labels.append("2020*")
     plt.xticks(arange(start_year,end_year)+0.0,labels, rotation = 45,size = 27)
     plt.tick_params(axis='x', bottom='off')
     ax1.tick_params(axis='y', right='off', left = 'off', top = 'off', bottom = 'off', length = 0.)
@@ -303,7 +327,7 @@ for bg in [0,1,2]:
     #leg = ax1.legend((inaugurated[0], bar_cumul[0]), (label3, label4), loc = 'upper left', fontsize=25, ncol = 2)
     #leg.draw_frame(False)
     
-    plt.text(0.05, -.33,
+    plt.text(0.1, -.35,
             label5,
             fontsize=20,
             horizontalalignment='center',
