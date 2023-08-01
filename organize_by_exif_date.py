@@ -1,3 +1,8 @@
+import os 
+from os.path import isfile, join
+from PIL import Image
+import shutil
+
 def jpg_date_group(source, dest, dry = True):
     '''
     Moves or copies JPG files from source dir to dest/date, where
